@@ -4,12 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FiestaProjectApplication
+public class FiestaApplication
 {
-
-  public static void main(String[] args)
-  {
-    SpringApplication.run(FiestaProjectApplication.class, args);
+  public static void main(String[] args) {
+    SpringApplication.run(FiestaApplication.class, args);
   }
-
 }
