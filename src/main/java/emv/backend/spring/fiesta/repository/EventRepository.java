@@ -1,6 +1,6 @@
-package emv.backend.spring.fiesta.fiestaproject.repository;
+package emv.backend.spring.fiesta.repository;
 
-import emv.backend.spring.fiesta.fiestaproject.model.Event;
+import emv.backend.spring.fiesta.model.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

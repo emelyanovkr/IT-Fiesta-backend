@@ -1,5 +1,6 @@
-package emv.backend.spring.fiesta.fiestaproject.model;
+package emv.backend.spring.fiesta.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -16,8 +17,8 @@ public class Event {
   @Size(max = 255, message = "Too big name's size")
   @NotBlank(message = "Name can't be empty")
   @NotNull
-  @Column(name = "name", nullable = false)
-  private String name;
+  @Column(name = "event_name", nullable = false)
+  private String eventName;
 
   @Size(max = 255, message = "Too big name's size")
   @NotBlank(message = "Hostname can't be empty")
@@ -35,17 +36,19 @@ public class Event {
   @Column(name = "location", nullable = false)
   private String location;
 
-  @Max(value = 10000, message = "Too many max visitors, attend below 10000, please")
+  @Max(value = 1000, message = "Too many max visitors, attend below 1000, please")
   @Column(name = "max_visitors")
   private Integer maxVisitors;
 
   @NotBlank(message = "Please, specify description of your event")
   @NotNull
-  @Column(name = "description", length = Integer.MAX_VALUE)
+  @Column(name = "description")
   private String description;
 
-  @Column(name = "additional_info", length = Integer.MAX_VALUE)
+  @Column(name = "additional_info")
   private String additionalInfo;
+
+  public Event() {}
 
   public String getAdditionalInfo() {
     return additionalInfo;
@@ -95,12 +98,12 @@ public class Event {
     this.hostName = hostName;
   }
 
-  public String getName() {
-    return name;
+  public String getEventName() {
+    return eventName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setEventName(String eventName) {
+    this.eventName = eventName;
   }
 
   public Integer getId() {
