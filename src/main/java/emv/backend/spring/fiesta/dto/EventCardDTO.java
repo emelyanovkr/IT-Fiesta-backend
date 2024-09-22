@@ -1,14 +1,17 @@
-package emv.backend.spring.fiesta.model;
+package emv.backend.spring.fiesta.dto;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "event_data")
-public class Event {
-
+public class EventCardDTO {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -45,46 +48,14 @@ public class Event {
   @Column(name = "description")
   private String description;
 
-  public Event() {}
+  public EventCardDTO() {}
 
-  public String getDescription() {
-    return description;
+  public Integer getId() {
+    return id;
   }
 
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public Integer getMaxVisitors() {
-    return maxVisitors;
-  }
-
-  public void setMaxVisitors(Integer maxVisitors) {
-    this.maxVisitors = maxVisitors;
-  }
-
-  public String getLocation() {
-    return location;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
-  public LocalDateTime getDateOfEvent() {
-    return dateOfEvent;
-  }
-
-  public void setDateOfEvent(LocalDateTime dateOfEvent) {
-    this.dateOfEvent = dateOfEvent;
-  }
-
-  public String getHostName() {
-    return hostName;
-  }
-
-  public void setHostName(String hostName) {
-    this.hostName = hostName;
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public String getEventName() {
@@ -95,11 +66,43 @@ public class Event {
     this.eventName = eventName;
   }
 
-  public Integer getId() {
-    return id;
+  public String getHostName() {
+    return hostName;
   }
 
-  public void setId(Integer id) {
-    this.id = id;
+  public void setHostName(String hostName) {
+    this.hostName = hostName;
+  }
+
+  public LocalDateTime getDateOfEvent() {
+    return dateOfEvent;
+  }
+
+  public void setDateOfEvent(LocalDateTime dateOfEvent) {
+    this.dateOfEvent = dateOfEvent;
+  }
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  public Integer getMaxVisitors() {
+    return maxVisitors;
+  }
+
+  public void setMaxVisitors(Integer maxVisitors) {
+    this.maxVisitors = maxVisitors;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 }
