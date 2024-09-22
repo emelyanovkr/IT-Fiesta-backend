@@ -1,17 +1,17 @@
 package emv.backend.spring.fiesta.controller;
 
+import emv.backend.spring.fiesta.dto.EventCardDTO;
 import emv.backend.spring.fiesta.model.Event;
 import emv.backend.spring.fiesta.service.EventService;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,15 +23,14 @@ public class ManageEventController {
 
   private final EventService eventService;
 
-  public ManageEventController(EventService eventService) {
+  public ManageEventController(EventService eventService, ModelMapper modelMapper) {
     this.eventService = eventService;
   }
 
-  // TODO: create DTO object
   // TODO: reconsider to move endpoint
   @GetMapping("/events")
-  public ResponseEntity<List<Event>> getAllEvents() {
-    return ResponseEntity.ok(eventService.getAllEvents());
+  public ResponseEntity<List<EventCardDTO>> getAllEvents() {
+    return ResponseEntity.ok(eventService.getAllEventsCards());
   }
 
   @PostMapping("/create")
@@ -51,5 +50,11 @@ public class ManageEventController {
     }
     eventService.saveEventDetails(event);
     return ResponseEntity.ok(Map.of("message", "Event created: " + event.getEventName()));
+  }
+
+  @DeleteMapping("/delete/{id}")
+  public ResponseEntity<HttpStatus> deleteEvent(@PathVariable int id) {
+    eventService.deleteEvent(id);
+    return ResponseEntity.ok().build();
   }
 }
