@@ -4,9 +4,10 @@ import emv.backend.spring.fiesta.dto.EventCardDTO;
 import emv.backend.spring.fiesta.model.Event;
 import emv.backend.spring.fiesta.repository.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -22,7 +23,7 @@ public class EventService {
     this.modelMapper = modelMapper;
   }
 
-  @Transactional
+  @Transactional(readOnly = true)
   public List<EventCardDTO> getAllEventsSorted() {
     List<Event> events = eventRepository.findAll();
     return events.stream()

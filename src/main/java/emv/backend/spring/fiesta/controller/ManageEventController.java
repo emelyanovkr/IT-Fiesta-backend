@@ -2,17 +2,15 @@ package emv.backend.spring.fiesta.controller;
 
 import emv.backend.spring.fiesta.dto.EventCardDTO;
 import emv.backend.spring.fiesta.service.EventService;
+import emv.backend.spring.fiesta.util.ErrorMessagesResponseHandler;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,22 +30,12 @@ public class ManageEventController {
     return ResponseEntity.ok(eventService.getAllEventsSorted());
   }
 
-  private ResponseEntity<Map<String, String>> handleErrorMessaging(BindingResult bindingResult) {
-    Map<String, String> errors = new HashMap<>();
-    for (ObjectError error : bindingResult.getAllErrors()) {
-      String fieldName = ((FieldError) error).getField();
-      String errorMsg = error.getDefaultMessage();
-      errors.put(fieldName, errorMsg);
-    }
-    return ResponseEntity.badRequest().body(errors);
-  }
-
   @PostMapping("/create")
   public ResponseEntity<Map<String, String>> createEvent(
       @RequestBody @Valid EventCardDTO event, BindingResult bindingResult) {
 
     if (bindingResult.hasErrors()) {
-      return handleErrorMessaging(bindingResult);
+      return ErrorMessagesResponseHandler.handleErrorMessaging(bindingResult);
     }
 
     eventService.createEvent(event);
@@ -59,7 +47,7 @@ public class ManageEventController {
       @PathVariable int id, @RequestBody @Valid EventCardDTO event, BindingResult bindingResult) {
 
     if (bindingResult.hasErrors()) {
-      return handleErrorMessaging(bindingResult);
+      return ErrorMessagesResponseHandler.handleErrorMessaging(bindingResult);
     }
 
     eventService.editEvent(event, id); // TODO: Handle Exception
