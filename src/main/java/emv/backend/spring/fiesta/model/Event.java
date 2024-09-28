@@ -6,7 +6,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "event_data")
+@Table(schema= "event_data_schema",name = "event_data")
 public class Event {
 
   @Id

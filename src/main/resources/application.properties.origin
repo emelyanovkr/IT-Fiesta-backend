@@ -1,5 +1,4 @@
 spring.application.name=FiestaProject
-
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 spring.datasource.url=
@@ -7,3 +6,11 @@ spring.datasource.username=
 spring.datasource.password=
 
 spring.jpa.properties.hibernate.show_sql=true
+
+jwt.secret=
+jwt.expiration_days=
+jwt.token_issuer=
+
+cors.allowed_origins=
+cors.allowed_methods=
+cors.allowed_headers=
