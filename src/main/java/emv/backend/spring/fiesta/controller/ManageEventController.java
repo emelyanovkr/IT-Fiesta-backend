@@ -3,8 +3,10 @@ package emv.backend.spring.fiesta.controller;
 import emv.backend.spring.fiesta.dto.EventCardDTO;
 import emv.backend.spring.fiesta.service.EventService;
 import emv.backend.spring.fiesta.util.ErrorMessagesResponseHandler;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,9 +20,11 @@ import java.util.Map;
 @RequestMapping("/manage")
 public class ManageEventController {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ManageEventController.class);
+
   private final EventService eventService;
 
-  public ManageEventController(EventService eventService, ModelMapper modelMapper) {
+  public ManageEventController(EventService eventService) {
     this.eventService = eventService;
   }
 
@@ -50,7 +54,13 @@ public class ManageEventController {
       return ErrorMessagesResponseHandler.handleErrorMessaging(bindingResult);
     }
 
-    eventService.editEvent(event, id); // TODO: Handle Exception
+    try {
+      eventService.editEvent(event, id);
+    } catch (EntityNotFoundException e) {
+      LOGGER.error(e.getMessage());
+      return ResponseEntity.status(HttpStatus.NOT_FOUND)
+          .body(Map.of("message", "Event not found: " + event.getEventName()));
+    }
     return ResponseEntity.ok(Map.of("message", "Event updated: " + event.getEventName()));
   }
 

@@ -4,8 +4,11 @@ import emv.backend.spring.fiesta.dto.AppUserDTO;
 import emv.backend.spring.fiesta.dto.AuthenticationDTO;
 import emv.backend.spring.fiesta.service.AuthenticationService;
 import emv.backend.spring.fiesta.service.RegistrationService;
+import emv.backend.spring.fiesta.util.EntityAlreadyExistException;
 import emv.backend.spring.fiesta.util.ErrorMessagesResponseHandler;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,6 +23,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
 
   private final RegistrationService registrationService;
   private final AuthenticationService authenticationService;
@@ -40,7 +45,8 @@ public class AuthController {
     String jwtToken;
     try {
       jwtToken = registrationService.registerUser(appUserDTO);
-    } catch (RuntimeException e) {
+    } catch (EntityAlreadyExistException e) {
+      LOGGER.error(e.getMessage());
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
     }
     return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("token", jwtToken));
@@ -56,6 +62,7 @@ public class AuthController {
     try {
       jwtToken = authenticationService.authenticateUser(authenticationDTO);
     } catch (BadCredentialsException e) {
+      LOGGER.error(e.getMessage());
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
     }
     return ResponseEntity.status(HttpStatus.OK).body(Map.of("token", jwtToken));

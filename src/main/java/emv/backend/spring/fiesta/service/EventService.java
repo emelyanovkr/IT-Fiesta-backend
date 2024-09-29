@@ -6,6 +6,7 @@ import emv.backend.spring.fiesta.repository.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,8 @@ public class EventService {
   private final EventRepository eventRepository;
   private final ModelMapper modelMapper;
 
+  private static final String DATE_OF_EVENT_COLUMN_NAME = "dateOfEvent";
+
   public EventService(EventRepository eventRepository, ModelMapper modelMapper) {
     this.eventRepository = eventRepository;
     this.modelMapper = modelMapper;
@@ -25,11 +28,9 @@ public class EventService {
 
   @Transactional(readOnly = true)
   public List<EventCardDTO> getAllEventsSorted() {
-    List<Event> events = eventRepository.findAll();
-    return events.stream()
-        .map((event) -> modelMapper.map(event, EventCardDTO.class))
-        .sorted(Comparator.comparing(EventCardDTO::getDateOfEvent))
-        .toList();
+    List<Event> events =
+        eventRepository.findAll(Sort.by(Sort.Direction.ASC, DATE_OF_EVENT_COLUMN_NAME));
+    return events.stream().map((event) -> modelMapper.map(event, EventCardDTO.class)).toList();
   }
 
   @Transactional
@@ -39,14 +40,11 @@ public class EventService {
   }
 
   @Transactional
-  public void editEvent(EventCardDTO event, int id) {
+  public void editEvent(EventCardDTO event, int id) throws EntityNotFoundException {
     Event currentEntry =
         eventRepository
             .findById(id)
-            .orElseThrow(
-                () ->
-                    new EntityNotFoundException(
-                        "Event not found with id: " + id)); // TODO: custom exceptions
+            .orElseThrow(() -> new EntityNotFoundException("Event not found with id: " + id));
 
     modelMapper.getConfiguration().setSkipNullEnabled(true);
     modelMapper.map(event, currentEntry);
