@@ -5,6 +5,7 @@ import emv.backend.spring.fiesta.model.AppUser;
 import emv.backend.spring.fiesta.model.Role;
 import emv.backend.spring.fiesta.repository.AppUserRepository;
 import emv.backend.spring.fiesta.security.jwtutil.JwtTokenHandling;
+import emv.backend.spring.fiesta.util.EntityAlreadyExistException;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,15 +40,16 @@ public class RegistrationService {
   @Transactional
   public String registerUser(AppUserDTO appUserDTO) {
     AppUser appUser = modelMapper.map(appUserDTO, AppUser.class);
+
+    // TODO: Reconsider setting role mechanism
     appUser.setRole(Role.USER);
 
-    // TODO: Provide custom exceptions
     if (appUserRepository.existsByEmail(appUser.getEmail())) {
-      throw new RuntimeException(EMAIL_ALREADY_EXIST_ERROR_MSG);
+      throw new EntityAlreadyExistException(EMAIL_ALREADY_EXIST_ERROR_MSG);
     }
 
     if (appUserRepository.existsByUsername(appUser.getUsername())) {
-      throw new RuntimeException(USERNAME_ALREADY_EXIST_ERROR_MSG);
+      throw new EntityAlreadyExistException(USERNAME_ALREADY_EXIST_ERROR_MSG);
     }
 
     appUser.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));

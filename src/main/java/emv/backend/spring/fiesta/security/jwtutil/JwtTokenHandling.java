@@ -44,8 +44,7 @@ public class JwtTokenHandling {
         .sign(USED_ALGORITHM);
   }
 
-  public String validateToken(String token) {
-    try {
+  public String validateToken(String token) throws JWTVerificationException {
       JWTVerifier verifier =
           JWT.require(USED_ALGORITHM)
               .withSubject(SUBJECT_USERNAME)
@@ -53,9 +52,5 @@ public class JwtTokenHandling {
               .build();
       DecodedJWT decodedJWT = verifier.verify(token);
       return decodedJWT.getClaim("username").asString();
-    } catch (JWTVerificationException e) {
-      // TODO: Custom Exception and Error Handling
-      throw new RuntimeException(e);
-    }
   }
 }
