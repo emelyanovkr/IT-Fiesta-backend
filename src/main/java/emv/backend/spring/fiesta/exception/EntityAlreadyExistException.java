@@ -1,4 +1,4 @@
-package emv.backend.spring.fiesta.util;
+package emv.backend.spring.fiesta.exception;
 
 public class EntityAlreadyExistException extends RuntimeException {
 

@@ -5,7 +5,7 @@ import emv.backend.spring.fiesta.model.AppUser;
 import emv.backend.spring.fiesta.model.Role;
 import emv.backend.spring.fiesta.repository.AppUserRepository;
 import emv.backend.spring.fiesta.security.jwtutil.JwtTokenHandling;
-import emv.backend.spring.fiesta.util.EntityAlreadyExistException;
+import emv.backend.spring.fiesta.exception.EntityAlreadyExistException;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

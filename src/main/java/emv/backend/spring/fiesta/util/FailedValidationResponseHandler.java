@@ -8,8 +8,8 @@ import org.springframework.validation.ObjectError;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ErrorMessagesResponseHandler {
-
+public class FailedValidationResponseHandler
+{
   public static ResponseEntity<Map<String, String>> handleErrorMessaging(BindingResult bindingResult) {
     Map<String, String> errors = new HashMap<>();
     for (ObjectError error : bindingResult.getAllErrors()) {
