@@ -1,8 +1,8 @@
 package emv.backend.spring.fiesta.service;
 
 import emv.backend.spring.fiesta.dto.AppUserDTO;
-import emv.backend.spring.fiesta.model.AppUser;
-import emv.backend.spring.fiesta.model.Role;
+import emv.backend.spring.fiesta.model.userAccount.AppUser;
+import emv.backend.spring.fiesta.model.userAccount.RoleType;
 import emv.backend.spring.fiesta.repository.AppUserRepository;
 import emv.backend.spring.fiesta.security.jwtutil.JwtTokenHandling;
 import emv.backend.spring.fiesta.exception.EntityAlreadyExistException;
@@ -42,7 +42,7 @@ public class RegistrationService {
     AppUser appUser = modelMapper.map(appUserDTO, AppUser.class);
 
     // TODO: Reconsider setting role mechanism
-    appUser.setRole(Role.USER);
+    // appUser.setRole(RoleType.USER);
 
     if (appUserRepository.existsByEmail(appUser.getEmail())) {
       throw new EntityAlreadyExistException(EMAIL_ALREADY_EXIST_ERROR_MSG);

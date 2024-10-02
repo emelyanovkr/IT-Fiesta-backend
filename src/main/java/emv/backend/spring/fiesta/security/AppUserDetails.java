@@ -1,6 +1,6 @@
 package emv.backend.spring.fiesta.security;
 
-import emv.backend.spring.fiesta.model.AppUser;
+import emv.backend.spring.fiesta.model.userAccount.AppUser;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,9 @@ public class AppUserDetails implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(appUser.getRole().toString()));
+    // TODO: fix authorities
+    // return List.of(new SimpleGrantedAuthority(appUser.getRole().toString()));
+    return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
   }
 
   @Override
