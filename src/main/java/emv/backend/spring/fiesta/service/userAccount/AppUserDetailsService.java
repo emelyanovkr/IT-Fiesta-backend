@@ -1,4 +1,4 @@
-package emv.backend.spring.fiesta.service;
+package emv.backend.spring.fiesta.service.userAccount;
 
 import emv.backend.spring.fiesta.model.userAccount.AppUser;
 import emv.backend.spring.fiesta.repository.AppUserRepository;

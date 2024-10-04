@@ -1,7 +1,7 @@
 package emv.backend.spring.fiesta.security.jwtutil;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import emv.backend.spring.fiesta.service.AppUserDetailsService;
+import emv.backend.spring.fiesta.service.userAccount.AppUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

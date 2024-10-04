@@ -9,12 +9,12 @@ public class UserRole {
   @EmbeddedId private UserRoleKey id;
 
   @ManyToOne
-  @MapsId("user_id")
+  @MapsId("userId")
   @JoinColumn(name = "user_id")
   private AppUser appUser;
 
   @ManyToOne
-  @MapsId("role_id")
+  @MapsId("roleId")
   @JoinColumn(name = "role_id")
   private Role role;
 

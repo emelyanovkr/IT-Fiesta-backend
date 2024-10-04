@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -17,7 +16,7 @@ public class AppUser {
 
   @NotBlank(message = "Username can't be blank")
   @NotNull(message = "Username can't be null")
-  @Column(name = "username")
+  @Column(name = "username", unique = true, nullable = false)
   private String username;
 
   @NotBlank(message = "Password can't be blank")
@@ -31,8 +30,8 @@ public class AppUser {
   @Column(name = "email")
   private String email;
 
-  @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  private Set<UserRole> roles = new HashSet<>();
+  @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<UserRole> roles;
 
   public AppUser() {}
 

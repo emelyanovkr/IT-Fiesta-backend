@@ -14,18 +14,16 @@ public class Role {
   private Integer id;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "name")
+  @Column(name = "name", unique = true, nullable = false)
   private RoleType name;
 
   public Role() {}
 
-  public Integer getId()
-  {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Integer id)
-  {
+  public void setId(Integer id) {
     this.id = id;
   }
 
