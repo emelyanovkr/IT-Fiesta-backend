@@ -1,15 +1,21 @@
 package emv.backend.spring.fiesta.config;
 
+import emv.backend.spring.fiesta.model.userAccount.RoleType;
 import emv.backend.spring.fiesta.security.jwtutil.JwtAuthenticationEntryPoint;
 import emv.backend.spring.fiesta.security.jwtutil.JwtAuthenticationFilter;
-import emv.backend.spring.fiesta.service.AppUserDetailsService;
+import emv.backend.spring.fiesta.service.userAccount.AppUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,7 +47,33 @@ public class SecurityConfig {
   }
 
   @Bean
-  public PasswordEncoder passwordEncoder() {
+  static GrantedAuthorityDefaults grantedAuthorityDefaults() {
+    return new GrantedAuthorityDefaults("");
+  }
+
+  @Bean
+  static RoleHierarchy roleHierarchy() {
+    return RoleHierarchyImpl.withRolePrefix("")
+        .role(RoleType.ADMIN.getRepresentation())
+        .implies(RoleType.HOST.getRepresentation())
+        .role(RoleType.HOST.getRepresentation())
+        .implies(RoleType.USER.getRepresentation())
+        .role(RoleType.USER.getRepresentation())
+        .implies(RoleType.GUEST.getRepresentation())
+        .build();
+  }
+
+  @Bean
+  static MethodSecurityExpressionHandler methodSecurityExpressionHandler(
+      RoleHierarchy roleHierarchy) {
+    DefaultMethodSecurityExpressionHandler expressionHandler =
+        new DefaultMethodSecurityExpressionHandler();
+    expressionHandler.setRoleHierarchy(roleHierarchy);
+    return expressionHandler;
+  }
+
+  @Bean
+  static PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
 
@@ -51,9 +83,11 @@ public class SecurityConfig {
         .cors(cors -> cors.configurationSource(corsConfigurationSource))
         .authorizeHttpRequests(
             auth ->
-                auth.requestMatchers("/auth/*")
+                auth.requestMatchers("/auth/*", "/events")
                     .permitAll()
                     .requestMatchers("/manage/*")
+                    .hasRole(RoleType.HOST.getRepresentation())
+                    .anyRequest()
                     .authenticated())
         .sessionManagement(
             sessionManagement ->

@@ -1,4 +1,4 @@
-package emv.backend.spring.fiesta.service;
+package emv.backend.spring.fiesta.service.userAccount;
 
 import emv.backend.spring.fiesta.dto.AuthenticationDTO;
 import emv.backend.spring.fiesta.security.jwtutil.JwtTokenHandling;

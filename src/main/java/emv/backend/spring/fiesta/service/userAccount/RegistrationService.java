@@ -1,11 +1,16 @@
-package emv.backend.spring.fiesta.service;
+package emv.backend.spring.fiesta.service.userAccount;
 
 import emv.backend.spring.fiesta.dto.AppUserDTO;
-import emv.backend.spring.fiesta.model.AppUser;
-import emv.backend.spring.fiesta.model.Role;
+import emv.backend.spring.fiesta.exception.EntityAlreadyExistException;
+import emv.backend.spring.fiesta.model.userAccount.AppUser;
+import emv.backend.spring.fiesta.model.userAccount.RoleType;
+import emv.backend.spring.fiesta.model.userAccount.UserRole;
+import emv.backend.spring.fiesta.model.userAccount.UserRoleKey;
 import emv.backend.spring.fiesta.repository.AppUserRepository;
+import emv.backend.spring.fiesta.repository.RoleRepository;
+import emv.backend.spring.fiesta.repository.UserRoleRepository;
 import emv.backend.spring.fiesta.security.jwtutil.JwtTokenHandling;
-import emv.backend.spring.fiesta.util.EntityAlreadyExistException;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class RegistrationService {
 
   private final AppUserRepository appUserRepository;
+  private final RoleRepository roleRepository;
+  private final UserRoleRepository userRoleRepository;
   private final PasswordEncoder passwordEncoder;
 
   private final JwtTokenHandling jwtTokenHandling;
@@ -28,21 +35,43 @@ public class RegistrationService {
 
   public RegistrationService(
       AppUserRepository appUserRepository,
+      RoleRepository roleRepository,
+      UserRoleRepository userRoleRepository,
       PasswordEncoder passwordEncoder,
       JwtTokenHandling jwtTokenHandling,
       ModelMapper modelMapper) {
     this.appUserRepository = appUserRepository;
+    this.roleRepository = roleRepository;
+    this.userRoleRepository = userRoleRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtTokenHandling = jwtTokenHandling;
     this.modelMapper = modelMapper;
   }
 
+  public UserRoleKey registerUserRoleKey(UserRole userRole) {
+    UserRoleKey userRoleKey = new UserRoleKey();
+    userRoleKey.setUserId(userRole.getAppUser().getId());
+    userRoleKey.setRoleId(userRole.getRole().getId());
+    return userRoleKey;
+  }
+
+  @Transactional
+  public void registerRole(AppUser appuser) {
+    UserRole userRole = new UserRole();
+    userRole.setAppUser(appuser);
+    userRole.setRole(
+        roleRepository
+            .findByName(RoleType.USER)
+            .orElseThrow(() -> new EntityNotFoundException(appuser.getUsername())));
+
+    UserRoleKey userRoleKey = registerUserRoleKey(userRole);
+    userRole.setId(userRoleKey);
+    userRoleRepository.save(userRole);
+  }
+
   @Transactional
   public String registerUser(AppUserDTO appUserDTO) {
     AppUser appUser = modelMapper.map(appUserDTO, AppUser.class);
-
-    // TODO: Reconsider setting role mechanism
-    appUser.setRole(Role.USER);
 
     if (appUserRepository.existsByEmail(appUser.getEmail())) {
       throw new EntityAlreadyExistException(EMAIL_ALREADY_EXIST_ERROR_MSG);
@@ -53,7 +82,8 @@ public class RegistrationService {
     }
 
     appUser.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
-    appUserRepository.save(appUser);
+    AppUser savedEntity = appUserRepository.save(appUser);
+    registerRole(savedEntity);
 
     return jwtTokenHandling.generateToken(appUser.getUsername());
   }

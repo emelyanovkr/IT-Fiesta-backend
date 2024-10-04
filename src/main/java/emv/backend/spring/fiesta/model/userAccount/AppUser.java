@@ -1,22 +1,22 @@
-package emv.backend.spring.fiesta.model;
+package emv.backend.spring.fiesta.model.userAccount;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Set;
+
 @Entity
 @Table(schema = "user_account_schema", name = "user_data")
-public class AppUser
-{
-
+public class AppUser {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
+  private Integer id;
 
   @NotBlank(message = "Username can't be blank")
   @NotNull(message = "Username can't be null")
-  @Column(name = "username")
+  @Column(name = "username", unique = true, nullable = false)
   private String username;
 
   @NotBlank(message = "Password can't be blank")
@@ -30,17 +30,16 @@ public class AppUser
   @Column(name = "email")
   private String email;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "role")
-  private Role role;
+  @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  private Set<UserRole> roles;
 
   public AppUser() {}
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
@@ -62,12 +61,12 @@ public class AppUser
     this.password = password;
   }
 
-  public Role getRole() {
-    return role;
+  public Set<UserRole> getRoles() {
+    return roles;
   }
 
-  public void setRole(Role role) {
-    this.role = role;
+  public void setRoles(Set<UserRole> roles) {
+    this.roles = roles;
   }
 
   public String getEmail() {
