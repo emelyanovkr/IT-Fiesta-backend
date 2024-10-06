@@ -1,7 +1,7 @@
 package emv.backend.spring.fiesta.controller;
 
-import emv.backend.spring.fiesta.dto.EventCardDTO;
-import emv.backend.spring.fiesta.service.EventService;
+import emv.backend.spring.fiesta.dto.EventDTO;
+import emv.backend.spring.fiesta.service.eventSchema.EventService;
 import emv.backend.spring.fiesta.util.FailedValidationResponseHandler;
 import jakarta.validation.Valid;
 import java.util.Map;
@@ -23,7 +23,7 @@ public class ManageEventController {
   @PostMapping("/create")
   @ResponseStatus(HttpStatus.CREATED)
   public Map<String, String> createEvent(
-      @RequestBody @Valid EventCardDTO event, BindingResult bindingResult) {
+    @RequestBody @Valid EventDTO event, BindingResult bindingResult) {
 
     if (bindingResult.hasErrors()) {
       return FailedValidationResponseHandler.handleErrorMessaging(bindingResult);
@@ -35,7 +35,7 @@ public class ManageEventController {
 
   @PutMapping("/edit/{id}")
   public Map<String, String> editEvent(
-      @PathVariable int id, @RequestBody @Valid EventCardDTO event, BindingResult bindingResult) {
+    @PathVariable int id, @RequestBody @Valid EventDTO event, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return FailedValidationResponseHandler.handleErrorMessaging(bindingResult);
     }

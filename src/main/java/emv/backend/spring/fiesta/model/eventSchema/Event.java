@@ -1,4 +1,4 @@
-package emv.backend.spring.fiesta.model;
+package emv.backend.spring.fiesta.model.eventSchema;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(schema= "event_data_schema",name = "event_data")
+@Table(schema = "event_data_schema", name = "event_data")
 public class Event {
 
   @Id
@@ -15,23 +15,19 @@ public class Event {
 
   @Size(max = 255, message = "Too big name's size")
   @NotBlank(message = "Name can't be empty")
-  @NotNull
   @Column(name = "event_name", nullable = false)
   private String eventName;
 
-  @Size(max = 150, message = "Too big hostName's size")
   @NotBlank(message = "Hostname can't be empty")
-  @NotNull
-  @Column(name = "host_name", nullable = false)
-  private String hostName;
+  @ManyToOne
+  @JoinColumn(name = "host_id", referencedColumnName = "id", nullable = false)
+  private Host host;
 
-  @NotNull
   @Column(name = "date_of_event", nullable = false)
   private LocalDateTime dateOfEvent;
 
   @Size(max = 350, message = "Location name is too long")
   @NotBlank(message = "Please, specify location for your event")
-  @NotNull
   @Column(name = "location", nullable = false)
   private String location;
 
@@ -79,12 +75,12 @@ public class Event {
     this.dateOfEvent = dateOfEvent;
   }
 
-  public String getHostName() {
-    return hostName;
+  public Host getHost() {
+    return host;
   }
 
-  public void setHostName(String hostName) {
-    this.hostName = hostName;
+  public void setHost(Host host) {
+    this.host = host;
   }
 
   public String getEventName() {

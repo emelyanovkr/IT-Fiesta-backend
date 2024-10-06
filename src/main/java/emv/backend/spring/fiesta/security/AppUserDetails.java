@@ -1,7 +1,7 @@
 package emv.backend.spring.fiesta.security;
 
-import emv.backend.spring.fiesta.model.userAccount.AppUser;
-import emv.backend.spring.fiesta.model.userAccount.UserRole;
+import emv.backend.spring.fiesta.model.userSchema.AppUser;
+import emv.backend.spring.fiesta.model.userSchema.UserRole;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;

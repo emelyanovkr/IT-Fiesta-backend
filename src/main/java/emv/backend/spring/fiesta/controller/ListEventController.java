@@ -1,7 +1,7 @@
 package emv.backend.spring.fiesta.controller;
 
-import emv.backend.spring.fiesta.dto.EventCardDTO;
-import emv.backend.spring.fiesta.service.EventService;
+import emv.backend.spring.fiesta.dto.EventDTO;
+import emv.backend.spring.fiesta.service.eventSchema.EventService;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +16,7 @@ public class ListEventController {
   }
 
   @GetMapping("/events")
-  public List<EventCardDTO> getAllEvents() {
+  public List<EventDTO> getAllEvents() {
     return (eventService.getAllEventsSorted());
   }
 }

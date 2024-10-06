@@ -1,14 +1,14 @@
-package emv.backend.spring.fiesta.service.userAccount;
+package emv.backend.spring.fiesta.service.userSchema;
 
 import emv.backend.spring.fiesta.dto.AppUserDTO;
 import emv.backend.spring.fiesta.exception.EntityAlreadyExistException;
-import emv.backend.spring.fiesta.model.userAccount.AppUser;
-import emv.backend.spring.fiesta.model.userAccount.RoleType;
-import emv.backend.spring.fiesta.model.userAccount.UserRole;
-import emv.backend.spring.fiesta.model.userAccount.UserRoleKey;
-import emv.backend.spring.fiesta.repository.AppUserRepository;
-import emv.backend.spring.fiesta.repository.RoleRepository;
-import emv.backend.spring.fiesta.repository.UserRoleRepository;
+import emv.backend.spring.fiesta.model.userSchema.AppUser;
+import emv.backend.spring.fiesta.model.userSchema.RoleType;
+import emv.backend.spring.fiesta.model.userSchema.UserRole;
+import emv.backend.spring.fiesta.model.userSchema.UserRoleKey;
+import emv.backend.spring.fiesta.repository.userSchema.AppUserRepository;
+import emv.backend.spring.fiesta.repository.userSchema.RoleRepository;
+import emv.backend.spring.fiesta.repository.userSchema.UserRoleRepository;
 import emv.backend.spring.fiesta.security.jwtutil.JwtTokenHandling;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -28,9 +28,9 @@ public class RegistrationService {
 
   private final ModelMapper modelMapper;
 
-  private final String EMAIL_ALREADY_EXIST_ERROR_MSG =
+  private static final String EMAIL_ALREADY_EXIST_ERROR_MSG =
       "Email already exist, please, select another email.";
-  private final String USERNAME_ALREADY_EXIST_ERROR_MSG =
+  private static final String USERNAME_ALREADY_EXIST_ERROR_MSG =
       "Username already exist, please, select another username.";
 
   public RegistrationService(
@@ -55,7 +55,6 @@ public class RegistrationService {
     return userRoleKey;
   }
 
-  @Transactional
   public void registerRole(AppUser appuser) {
     UserRole userRole = new UserRole();
     userRole.setAppUser(appuser);

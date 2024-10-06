@@ -1,17 +1,14 @@
-package emv.backend.spring.fiesta.service;
+package emv.backend.spring.fiesta.service.eventSchema;
 
-import emv.backend.spring.fiesta.dto.EventCardDTO;
-import emv.backend.spring.fiesta.model.Event;
-import emv.backend.spring.fiesta.repository.EventRepository;
+import emv.backend.spring.fiesta.dto.EventDTO;
+import emv.backend.spring.fiesta.model.eventSchema.Event;
+import emv.backend.spring.fiesta.repository.eventSchema.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
-
+import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Comparator;
-import java.util.List;
 
 @Service
 public class EventService {
@@ -27,20 +24,25 @@ public class EventService {
   }
 
   @Transactional(readOnly = true)
-  public List<EventCardDTO> getAllEventsSorted() {
+  public List<EventDTO> getAllEventsSorted() {
+    modelMapper
+        .typeMap(Event.class, EventDTO.class)
+        .addMapping(
+            src -> src.getHost().getHostName(), (dest, value) -> dest.setHostName((String) value));
+
     List<Event> events =
         eventRepository.findAll(Sort.by(Sort.Direction.ASC, DATE_OF_EVENT_COLUMN_NAME));
-    return events.stream().map((event) -> modelMapper.map(event, EventCardDTO.class)).toList();
+    return events.stream().map(event -> modelMapper.map(event, EventDTO.class)).toList();
   }
 
   @Transactional
-  public void createEvent(EventCardDTO event) {
+  public void createEvent(EventDTO event) {
     Event newEvent = modelMapper.map(event, Event.class);
     eventRepository.save(newEvent);
   }
 
   @Transactional
-  public void editEvent(EventCardDTO event, int id) throws EntityNotFoundException {
+  public void editEvent(EventDTO event, int id) throws EntityNotFoundException {
     Event currentEntry =
         eventRepository
             .findById(id)

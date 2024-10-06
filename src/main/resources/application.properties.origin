@@ -10,7 +10,7 @@ spring.jpa.properties.hibernate.show_sql=true
 logging.pattern.dateformat=yyyy-MM-dd HH:mm:ss
 
 jwt.secret=
-jwt.expiration_days=
+jwt.expiration_hours=
 jwt.token_issuer=
 
 cors.allowed_origins=

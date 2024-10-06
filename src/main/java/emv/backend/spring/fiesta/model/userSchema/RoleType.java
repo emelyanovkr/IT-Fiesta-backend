@@ -1,4 +1,4 @@
-package emv.backend.spring.fiesta.model.userAccount;
+package emv.backend.spring.fiesta.model.userSchema;
 
 public enum RoleType {
   GUEST("GUEST"),

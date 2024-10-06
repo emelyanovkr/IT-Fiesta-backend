@@ -5,12 +5,10 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 
-public class EventCardDTO {
-  @Id
-  private Integer id;
+public class EventDTO {
+  @Id private Integer id;
 
   @Size(max = 255, message = "Too big name's size")
   @NotBlank(message = "Name can't be empty")
@@ -22,8 +20,7 @@ public class EventCardDTO {
   @NotNull
   private String hostName;
 
-  @NotNull
-  private LocalDateTime dateOfEvent;
+  @NotNull private LocalDateTime dateOfEvent;
 
   @Size(max = 350, message = "Location name is too long")
   @NotBlank(message = "Please, specify location for your event")
@@ -38,7 +35,7 @@ public class EventCardDTO {
   @Size(max = 1000, message = "Too large description information")
   private String description;
 
-  public EventCardDTO() {}
+  public EventDTO() {}
 
   public Integer getId() {
     return id;

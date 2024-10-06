@@ -1,4 +1,4 @@
-package emv.backend.spring.fiesta.model.userAccount;
+package emv.backend.spring.fiesta.model.userSchema;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

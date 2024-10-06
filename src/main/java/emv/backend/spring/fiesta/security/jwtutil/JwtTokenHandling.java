@@ -18,8 +18,8 @@ public class JwtTokenHandling {
   @Value("${jwt.secret}")
   private String SECRET;
 
-  @Value("${jwt.expiration_days}")
-  private long EXPIRATION_DAYS;
+  @Value("${jwt.expiration_hours}")
+  private long EXPIRATION_HOURS;
 
   @Value("${jwt.token_issuer}")
   private String TOKEN_ISSUER;
@@ -30,7 +30,6 @@ public class JwtTokenHandling {
   @PostConstruct
   public void init() {
     this.USED_ALGORITHM = Algorithm.HMAC256(SECRET);
-    ;
   }
 
   public String generateToken(String username) {
@@ -40,17 +39,14 @@ public class JwtTokenHandling {
         .withClaim("username", username)
         .withIssuedAt(new Date())
         .withIssuer(TOKEN_ISSUER)
-        .withExpiresAt(Instant.now().plus(Duration.ofDays(EXPIRATION_DAYS)))
+        .withExpiresAt(Instant.now().plus(Duration.ofHours(EXPIRATION_HOURS)))
         .sign(USED_ALGORITHM);
   }
 
   public String validateToken(String token) throws JWTVerificationException {
-      JWTVerifier verifier =
-          JWT.require(USED_ALGORITHM)
-              .withSubject(SUBJECT_USERNAME)
-              .withIssuer(TOKEN_ISSUER)
-              .build();
-      DecodedJWT decodedJWT = verifier.verify(token);
-      return decodedJWT.getClaim("username").asString();
+    JWTVerifier verifier =
+        JWT.require(USED_ALGORITHM).withSubject(SUBJECT_USERNAME).withIssuer(TOKEN_ISSUER).build();
+    DecodedJWT decodedJWT = verifier.verify(token);
+    return decodedJWT.getClaim("username").asString();
   }
 }

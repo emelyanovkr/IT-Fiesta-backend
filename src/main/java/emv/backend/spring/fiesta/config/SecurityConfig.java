@@ -1,9 +1,9 @@
 package emv.backend.spring.fiesta.config;
 
-import emv.backend.spring.fiesta.model.userAccount.RoleType;
+import emv.backend.spring.fiesta.model.userSchema.RoleType;
 import emv.backend.spring.fiesta.security.jwtutil.JwtAuthenticationEntryPoint;
 import emv.backend.spring.fiesta.security.jwtutil.JwtAuthenticationFilter;
-import emv.backend.spring.fiesta.service.userAccount.AppUserDetailsService;
+import emv.backend.spring.fiesta.service.userSchema.AppUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
