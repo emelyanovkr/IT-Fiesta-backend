@@ -1,10 +1,10 @@
 package emv.backend.spring.fiesta.model.userSchema;
 
+import emv.backend.spring.fiesta.model.eventSchema.Host;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.Set;
 
 @Entity
@@ -32,6 +32,9 @@ public class AppUser {
 
   @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   private Set<UserRole> roles;
+
+  @OneToOne(mappedBy = "appUser")
+  private Host host;
 
   public AppUser() {}
 
@@ -75,5 +78,13 @@ public class AppUser {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public Host getHost() {
+    return host;
+  }
+
+  public void setHost(Host host) {
+    this.host = host;
   }
 }

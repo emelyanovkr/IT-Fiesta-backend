@@ -15,6 +15,7 @@ public class ListEventController {
     this.eventService = eventService;
   }
 
+  // TODO: Pagination
   @GetMapping("/events")
   public List<EventDTO> getAllEvents() {
     return (eventService.getAllEventsSorted());

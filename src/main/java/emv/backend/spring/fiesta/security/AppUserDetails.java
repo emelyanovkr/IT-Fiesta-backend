@@ -30,6 +30,10 @@ public class AppUserDetails implements UserDetails {
     return authorityList;
   }
 
+  public Integer getId() {
+    return appUser.getId();
+  }
+
   @Override
   public String getPassword() {
     return appUser.getPassword();
