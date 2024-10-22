@@ -1,7 +1,7 @@
-package emv.backend.spring.fiesta.repository;
+package emv.backend.spring.fiesta.repository.userSchema;
 
-import emv.backend.spring.fiesta.model.userAccount.Role;
-import emv.backend.spring.fiesta.model.userAccount.RoleType;
+import emv.backend.spring.fiesta.model.userSchema.Role;
+import emv.backend.spring.fiesta.model.userSchema.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

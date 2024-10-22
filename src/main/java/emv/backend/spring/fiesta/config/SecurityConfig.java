@@ -1,9 +1,9 @@
 package emv.backend.spring.fiesta.config;
 
-import emv.backend.spring.fiesta.model.userAccount.RoleType;
+import emv.backend.spring.fiesta.model.userSchema.RoleType;
 import emv.backend.spring.fiesta.security.jwtutil.JwtAuthenticationEntryPoint;
 import emv.backend.spring.fiesta.security.jwtutil.JwtAuthenticationFilter;
-import emv.backend.spring.fiesta.service.userAccount.AppUserDetailsService;
+import emv.backend.spring.fiesta.service.userSchema.AppUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -12,6 +12,7 @@ import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -25,6 +26,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
   private final CorsConfigurationSource corsConfigurationSource;

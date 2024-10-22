@@ -1,6 +1,6 @@
-package emv.backend.spring.fiesta.repository;
+package emv.backend.spring.fiesta.repository.userSchema;
 
-import emv.backend.spring.fiesta.model.userAccount.AppUser;
+import emv.backend.spring.fiesta.model.userSchema.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

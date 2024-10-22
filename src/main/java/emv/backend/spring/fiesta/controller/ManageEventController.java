@@ -1,12 +1,15 @@
 package emv.backend.spring.fiesta.controller;
 
-import emv.backend.spring.fiesta.dto.EventCardDTO;
-import emv.backend.spring.fiesta.service.EventService;
+import emv.backend.spring.fiesta.dto.EventDTO;
+import emv.backend.spring.fiesta.security.AppUserDetails;
+import emv.backend.spring.fiesta.service.eventSchema.EventService;
 import emv.backend.spring.fiesta.util.FailedValidationResponseHandler;
 import jakarta.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +23,18 @@ public class ManageEventController {
     this.eventService = eventService;
   }
 
+  // TODO: redo all operations for specified host
+  @GetMapping
+  public List<EventDTO> getEventsByHost(Authentication auth) {
+    Integer authenticatedUserId = ((AppUserDetails) auth.getPrincipal()).getId();
+
+    return eventService.getEventsByUserId(authenticatedUserId);
+  }
+
   @PostMapping("/create")
   @ResponseStatus(HttpStatus.CREATED)
   public Map<String, String> createEvent(
-      @RequestBody @Valid EventCardDTO event, BindingResult bindingResult) {
+      @RequestBody @Valid EventDTO event, BindingResult bindingResult) {
 
     if (bindingResult.hasErrors()) {
       return FailedValidationResponseHandler.handleErrorMessaging(bindingResult);
@@ -35,7 +46,7 @@ public class ManageEventController {
 
   @PutMapping("/edit/{id}")
   public Map<String, String> editEvent(
-      @PathVariable int id, @RequestBody @Valid EventCardDTO event, BindingResult bindingResult) {
+      @PathVariable int id, @RequestBody @Valid EventDTO event, BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return FailedValidationResponseHandler.handleErrorMessaging(bindingResult);
     }

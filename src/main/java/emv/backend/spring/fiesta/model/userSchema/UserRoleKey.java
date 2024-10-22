@@ -1,4 +1,4 @@
-package emv.backend.spring.fiesta.model.userAccount;
+package emv.backend.spring.fiesta.model.userSchema;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

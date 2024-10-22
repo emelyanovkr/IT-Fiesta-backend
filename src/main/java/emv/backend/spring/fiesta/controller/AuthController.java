@@ -2,8 +2,8 @@ package emv.backend.spring.fiesta.controller;
 
 import emv.backend.spring.fiesta.dto.AppUserDTO;
 import emv.backend.spring.fiesta.dto.AuthenticationDTO;
-import emv.backend.spring.fiesta.service.userAccount.AuthenticationService;
-import emv.backend.spring.fiesta.service.userAccount.RegistrationService;
+import emv.backend.spring.fiesta.service.userSchema.AuthenticationService;
+import emv.backend.spring.fiesta.service.userSchema.RegistrationService;
 import emv.backend.spring.fiesta.util.FailedValidationResponseHandler;
 import jakarta.validation.Valid;
 import java.util.Map;
