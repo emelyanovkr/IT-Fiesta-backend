@@ -2,7 +2,6 @@ package emv.backend.spring.fiesta.model.eventSchema;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,7 +17,7 @@ public class Event {
   @Column(name = "event_name", nullable = false)
   private String eventName;
 
-  @NotBlank(message = "Hostname can't be empty")
+  @NotNull
   @ManyToOne
   @JoinColumn(name = "host_id", referencedColumnName = "id", nullable = false)
   private Host host;

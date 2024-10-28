@@ -1,6 +1,5 @@
 package emv.backend.spring.fiesta.service.userSchema;
 
-import emv.backend.spring.fiesta.dto.AppUserDTO;
 import emv.backend.spring.fiesta.exception.EntityAlreadyExistException;
 import emv.backend.spring.fiesta.model.userSchema.AppUser;
 import emv.backend.spring.fiesta.model.userSchema.RoleType;
@@ -11,7 +10,6 @@ import emv.backend.spring.fiesta.repository.userSchema.RoleRepository;
 import emv.backend.spring.fiesta.repository.userSchema.UserRoleRepository;
 import emv.backend.spring.fiesta.security.jwtutil.JwtTokenHandling;
 import jakarta.persistence.EntityNotFoundException;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,8 +24,6 @@ public class RegistrationService {
 
   private final JwtTokenHandling jwtTokenHandling;
 
-  private final ModelMapper modelMapper;
-
   private static final String EMAIL_ALREADY_EXIST_ERROR_MSG =
       "Email already exist, please, select another email.";
   private static final String USERNAME_ALREADY_EXIST_ERROR_MSG =
@@ -38,14 +34,12 @@ public class RegistrationService {
       RoleRepository roleRepository,
       UserRoleRepository userRoleRepository,
       PasswordEncoder passwordEncoder,
-      JwtTokenHandling jwtTokenHandling,
-      ModelMapper modelMapper) {
+      JwtTokenHandling jwtTokenHandling) {
     this.appUserRepository = appUserRepository;
     this.roleRepository = roleRepository;
     this.userRoleRepository = userRoleRepository;
     this.passwordEncoder = passwordEncoder;
     this.jwtTokenHandling = jwtTokenHandling;
-    this.modelMapper = modelMapper;
   }
 
   public UserRoleKey registerUserRoleKey(UserRole userRole) {
@@ -69,9 +63,7 @@ public class RegistrationService {
   }
 
   @Transactional
-  public String registerUser(AppUserDTO appUserDTO) {
-    AppUser appUser = modelMapper.map(appUserDTO, AppUser.class);
-
+  public String registerUser(AppUser appUser) {
     if (appUserRepository.existsByEmail(appUser.getEmail())) {
       throw new EntityAlreadyExistException(EMAIL_ALREADY_EXIST_ERROR_MSG);
     }
@@ -80,7 +72,7 @@ public class RegistrationService {
       throw new EntityAlreadyExistException(USERNAME_ALREADY_EXIST_ERROR_MSG);
     }
 
-    appUser.setPassword(passwordEncoder.encode(appUserDTO.getPassword()));
+    appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
     AppUser savedEntity = appUserRepository.save(appUser);
     registerRole(savedEntity);
 

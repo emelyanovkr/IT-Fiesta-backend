@@ -1,13 +1,11 @@
 package emv.backend.spring.fiesta.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public class AppUserDTO {
 
-  @Id
   private int id;
 
   @NotBlank(message = "Username can't be blank")

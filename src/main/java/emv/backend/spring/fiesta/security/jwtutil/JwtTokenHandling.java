@@ -6,12 +6,11 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 @Component
 public class JwtTokenHandling {
@@ -43,6 +42,7 @@ public class JwtTokenHandling {
         .sign(USED_ALGORITHM);
   }
 
+  // TODO: fix jwt token verifying for 2 accounts
   public String validateToken(String token) throws JWTVerificationException {
     JWTVerifier verifier =
         JWT.require(USED_ALGORITHM).withSubject(SUBJECT_USERNAME).withIssuer(TOKEN_ISSUER).build();
