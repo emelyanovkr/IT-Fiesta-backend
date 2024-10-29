@@ -4,7 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-/src/main/resources/application.properties
+/.env
 
 bin/
 !**/src/main/**/bin/
@@ -19,5 +19,3 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-### VS Code ###
-.vscode/

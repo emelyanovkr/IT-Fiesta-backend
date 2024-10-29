@@ -37,7 +37,6 @@ public class ManageEventController {
             src -> src.getHost().getHostName(), (dest, value) -> dest.setHostName((String) value));
   }
 
-  // TODO: redo all operations for specified host
   @GetMapping
   public List<EventDTO> getEventsByHost(Authentication auth) {
     Integer authenticatedUserId = ((AppUserDetails) auth.getPrincipal()).getId();
@@ -74,6 +73,7 @@ public class ManageEventController {
     }
 
     Integer authenticatedUserId = ((AppUserDetails) auth.getPrincipal()).getId();
+
     Event entity = modelMapper.map(event, Event.class);
 
     eventService.editEvent(entity, id, authenticatedUserId);
