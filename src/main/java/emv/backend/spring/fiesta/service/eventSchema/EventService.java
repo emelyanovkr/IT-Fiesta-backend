@@ -1,11 +1,13 @@
 package emv.backend.spring.fiesta.service.eventSchema;
 
-import emv.backend.spring.fiesta.dto.EventDTO;
+import emv.backend.spring.fiesta.exception.DatabaseManagementException;
+import emv.backend.spring.fiesta.exception.ForbiddenAccessException;
 import emv.backend.spring.fiesta.model.eventSchema.Event;
+import emv.backend.spring.fiesta.model.eventSchema.Host;
 import emv.backend.spring.fiesta.repository.eventSchema.EventRepository;
 import emv.backend.spring.fiesta.repository.eventSchema.HostRepository;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,8 @@ public class EventService {
   private final ModelMapper modelMapper;
 
   private static final String DATE_OF_EVENT_COLUMN_NAME = "dateOfEvent";
+  private static final String EVENT_NOT_FOUND_ERROR_MSG = "EVENT NOT FOUND WITH ID: {0}";
+  private static final String BAD_ACCESS_ERROR_MSG = "BAD ACCESS WITH CURRENT ID: {0}";
 
   public EventService(
       EventRepository eventRepository, HostRepository hostRepository, ModelMapper modelMapper) {
@@ -30,47 +34,53 @@ public class EventService {
     this.modelMapper = modelMapper;
   }
 
-  @PostConstruct
-  public void init() {
-    modelMapper
-        .typeMap(Event.class, EventDTO.class)
-        .addMapping(
-            src -> src.getHost().getHostName(), (dest, value) -> dest.setHostName((String) value));
-  }
-
   @Transactional(readOnly = true)
-  public List<EventDTO> getEventsByUserId(Integer userId) {
+  public List<Event> getEventsByUserId(Integer userId) {
     Optional<Integer> hostEntry = hostRepository.findHostIdByUserId(userId);
 
     List<Event> events = new ArrayList<>();
     if (hostEntry.isPresent()) {
       events =
-          eventRepository.getEventsByHost_Id(
+          eventRepository.getEventsByHostId(
               hostEntry.get(), Sort.by(Sort.Direction.ASC, DATE_OF_EVENT_COLUMN_NAME));
     }
 
-    return events.stream().map(event -> modelMapper.map(event, EventDTO.class)).toList();
+    return events;
   }
 
   @Transactional(readOnly = true)
-  public List<EventDTO> getAllEventsSorted() {
-    List<Event> events =
-        eventRepository.findAll(Sort.by(Sort.Direction.ASC, DATE_OF_EVENT_COLUMN_NAME));
-    return events.stream().map(event -> modelMapper.map(event, EventDTO.class)).toList();
+  public List<Event> getAllEventsSorted() {
+    return eventRepository.findAll(Sort.by(Sort.Direction.ASC, DATE_OF_EVENT_COLUMN_NAME));
   }
 
   @Transactional
-  public void createEvent(EventDTO event) {
-    Event newEvent = modelMapper.map(event, Event.class);
-    eventRepository.save(newEvent);
+  public void createEvent(Event event, Integer userId) {
+    Host hostEntry = hostRepository.findHostByUserId(userId);
+
+    event.setHost(hostEntry);
+    eventRepository.save(event);
   }
 
-  @Transactional
-  public void editEvent(EventDTO event, int id) throws EntityNotFoundException {
+  private Event getCheckedEvent(int id, Integer userId) throws ForbiddenAccessException {
     Event currentEntry =
         eventRepository
             .findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Event not found with id: " + id));
+            .orElseThrow(
+                () ->
+                    new EntityNotFoundException(
+                        MessageFormat.format(EVENT_NOT_FOUND_ERROR_MSG, id)));
+
+    Integer storedUserId = currentEntry.getHost().getAppUser().getId();
+    if (storedUserId != userId) {
+      throw new ForbiddenAccessException(MessageFormat.format(BAD_ACCESS_ERROR_MSG, userId));
+    }
+
+    return currentEntry;
+  }
+
+  @Transactional
+  public void editEvent(Event event, int id, Integer userId) throws DatabaseManagementException {
+    Event currentEntry = getCheckedEvent(id, userId);
 
     modelMapper.getConfiguration().setSkipNullEnabled(true);
     modelMapper.map(event, currentEntry);
@@ -79,7 +89,8 @@ public class EventService {
   }
 
   @Transactional
-  public void deleteEvent(int id) {
-    eventRepository.deleteById(id);
+  public void deleteEvent(int id, Integer userId) throws DatabaseManagementException {
+    Event currentEntry = getCheckedEvent(id, userId);
+    eventRepository.delete(currentEntry);
   }
 }

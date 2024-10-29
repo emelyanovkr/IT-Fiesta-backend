@@ -1,6 +1,5 @@
 package emv.backend.spring.fiesta.dto;
 
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
 public class EventDTO {
-  @Id private Integer id;
+  private Integer id;
 
   @Size(max = 255, message = "Too big name's size")
   @NotBlank(message = "Name can't be empty")

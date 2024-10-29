@@ -1,6 +1,6 @@
 package emv.backend.spring.fiesta.service.userSchema;
 
-import emv.backend.spring.fiesta.dto.AuthenticationDTO;
+import emv.backend.spring.fiesta.model.userSchema.AppUser;
 import emv.backend.spring.fiesta.security.jwtutil.JwtTokenHandling;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,14 +19,13 @@ public class AuthenticationService {
     this.jwtTokenHandling = jwtTokenHandling;
   }
 
-  public String authenticateUser(AuthenticationDTO authenticationDTO)
-      throws BadCredentialsException {
+  public String authenticateUser(AppUser authentication) throws BadCredentialsException {
     UsernamePasswordAuthenticationToken authenticationToken =
         new UsernamePasswordAuthenticationToken(
-            authenticationDTO.getUsername(), authenticationDTO.getPassword());
+            authentication.getUsername(), authentication.getPassword());
 
     authenticationManager.authenticate(authenticationToken);
 
-    return jwtTokenHandling.generateToken(authenticationDTO.getUsername());
+    return jwtTokenHandling.generateToken(authentication.getUsername());
   }
 }

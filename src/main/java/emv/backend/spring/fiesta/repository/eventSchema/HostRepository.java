@@ -10,4 +10,7 @@ public interface HostRepository extends JpaRepository<Host, Integer> {
 
   @Query("SELECT id FROM Host WHERE appUser.id = :userId")
   Optional<Integer> findHostIdByUserId(@Param("userId") int id);
+
+  @Query("SELECT h FROM Host h WHERE h.appUser.id = :userId")
+  Host findHostByUserId(@Param("userId") int userId);
 }

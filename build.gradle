@@ -5,12 +5,16 @@ plugins {
 }
 
 group = 'emv.backend.spring.fiesta'
-version = '0.0.1-SNAPSHOT'
+version = '1.0'
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+bootJar {
+    destinationDirectory = file("target")
 }
 
 repositories {

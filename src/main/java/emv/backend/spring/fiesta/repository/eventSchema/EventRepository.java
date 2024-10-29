@@ -6,6 +6,5 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EventRepository extends JpaRepository<Event, Integer> {
-
-  List<Event> getEventsByHost_Id(Integer hostId, Sort sorting);
+  List<Event> getEventsByHostId(Integer hostId, Sort sorting);
 }
