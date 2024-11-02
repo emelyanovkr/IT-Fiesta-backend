@@ -10,4 +10,5 @@ Backend part of it-fiesta project. For now it stands as one service only. But I 
   + Creating different microservices responsible for some parts in application (like event management, role management, authorization, admin panel, user panel, favourites and likes and etc.)
   + Try to use kafka, if needed, to communicate between services
 + Provide test coverage for critical parts of the application
++ Use swagger to create documentation about endpoints of application
 + Create readme
